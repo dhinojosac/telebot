@@ -115,11 +115,23 @@ func (b *Bot) DeleteMessage(recipient Recipient, messageID float64) error {
 		"message_id": string(mId),
 	}
 
-	resp, err := b.sendCommand("deleteMessage", params)
-	fmt.Printf("responded with: %v", resp)
+	responseJSON, err := b.sendCommand("deleteMessage", params)
+
+	var responseRecieved struct {
+		Ok          bool
+		Description string
+		Result      map[string]interface{}
+	}
+
+	err = json.Unmarshal(responseJSON, &responseRecieved)
 	if err != nil {
 		return err
 	}
+
+	if !responseRecieved.Ok {
+		return fmt.Errorf("telebot: %s", responseRecieved.Description)
+	}
+
 	return nil
 }
 
