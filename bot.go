@@ -108,12 +108,14 @@ func (b *Bot) poll(
 // DeleteMessage deletes a message by id
 func (b *Bot) DeleteMessage(recipient Recipient, messageID float64) error {
 
-	mId := int(messageID)
+	mId := string(int(messageID))
 
 	params := map[string]string{
 		"chat_id":    recipient.Destination(),
-		"message_id": string(mId),
+		"message_id": mId,
 	}
+
+	fmt.Printf("params are %v", params)
 
 	responseJSON, err := b.sendCommand("deleteMessage", params)
 
