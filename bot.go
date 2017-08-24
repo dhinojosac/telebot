@@ -115,7 +115,8 @@ func (b *Bot) DeleteMessage(recipient Recipient, messageID float64) error {
 		"message_id": string(mId),
 	}
 
-	_, err := b.sendCommand("deleteMessage", params)
+	resp, err := b.sendCommand("deleteMessage", params)
+	fmt.Printf("responded with: %v", resp)
 	if err != nil {
 		return err
 	}
