@@ -106,7 +106,7 @@ func (b *Bot) poll(
 }
 
 // SendMessage sends a text message to recipient.
-func (b *Bot) SendMessage(recipient Recipient, message string, options *SendOptions) (int, error) {
+func (b *Bot) SendMessage(recipient Recipient, message string, options *SendOptions) (float64, error) {
 	params := map[string]string{
 		"chat_id": recipient.Destination(),
 		"text":    message,
@@ -136,7 +136,7 @@ func (b *Bot) SendMessage(recipient Recipient, message string, options *SendOpti
 		return 0, fmt.Errorf("telebot: %s", responseRecieved.Description)
 	}
 
-	return responseRecieved.Result["message_id"].(int), nil
+	return responseRecieved.Result["message_id"].(float64), nil
 }
 
 // ForwardMessage forwards a message to recipient.
