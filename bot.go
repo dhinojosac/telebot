@@ -105,6 +105,23 @@ func (b *Bot) poll(
 
 }
 
+// DeleteMessage deletes a message by id
+func (b *Bot) DeleteMessage(recipient Recipient, messageID float64) error {
+
+	mId := int(messageID)
+
+	params := map[string]string{
+		"chat_id":    recipient.Destination(),
+		"message_id": string(mId),
+	}
+
+	_, err := b.sendCommand("deleteMessage", params)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SendMessage sends a text message to recipient.
 func (b *Bot) SendMessage(recipient Recipient, message string, options *SendOptions) (float64, error) {
 	params := map[string]string{
