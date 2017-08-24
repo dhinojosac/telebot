@@ -106,7 +106,7 @@ func (b *Bot) poll(
 }
 
 // SendMessage sends a text message to recipient.
-func (b *Bot) SendMessage(recipient Recipient, message string, options *SendOptions) error {
+func (b *Bot) SendMessage(recipient Recipient, message string, options *SendOptions) (int, error) {
 	params := map[string]string{
 		"chat_id": recipient.Destination(),
 		"text":    message,
@@ -118,24 +118,25 @@ func (b *Bot) SendMessage(recipient Recipient, message string, options *SendOpti
 
 	responseJSON, err := b.sendCommand("sendMessage", params)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	var responseRecieved struct {
 		Ok          bool
 		Description string
+		Result      map[string]interface{}
 	}
 
 	err = json.Unmarshal(responseJSON, &responseRecieved)
 	if err != nil {
-		return errors.Wrap(err, "bad response json")
+		return 0, err
 	}
 
 	if !responseRecieved.Ok {
-		return errors.Errorf("api error: %s", responseRecieved.Description)
+		return 0, fmt.Errorf("telebot: %s", responseRecieved.Description)
 	}
 
-	return nil
+	return responseRecieved.Result["message_id"].(int), nil
 }
 
 // ForwardMessage forwards a message to recipient.
