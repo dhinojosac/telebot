@@ -115,14 +115,12 @@ func (b *Bot) DeleteMessage(recipient Recipient, messageID float64) error {
 		"message_id": fmt.Sprint(mId),
 	}
 
-	fmt.Printf("params are %v", params)
-
 	responseJSON, err := b.sendCommand("deleteMessage", params)
 
 	var responseRecieved struct {
 		Ok          bool
 		Description string
-		Result      map[string]interface{}
+		Result      bool
 	}
 
 	err = json.Unmarshal(responseJSON, &responseRecieved)
